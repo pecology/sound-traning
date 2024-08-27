@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>相対音感トレーニング</title>
+    <style>
+        .key {
+            display: inline-block;
+            width: 40px;
+            height: 200px;
+            margin: 1px;
+            background: white;
+            border: 1px solid black;
+            text-align: center;
+            line-height: 200px;
+            cursor: pointer;
+        }
+        .key.black {
+            width: 30px;
+            height: 120px;
+            background: black;
+            color: white;
+            position: relative;
+            top: -80px;
+            left: -15px;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <h1>相対音感トレーニング</h1>
+    <div id="keyboard">
+        <!-- ピアノの鍵盤をここに追加 -->
+    </div>
+    <button id="start">トレーニング開始</button>
+    <button id="playC">C音を再生</button>
+    <button id="playChords">伴奏を再生</button>
+    <div id="result"></div>
+    <script src="app.js"></script>
+</body>
+</html>
