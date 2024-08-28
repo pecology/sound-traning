@@ -7,24 +7,32 @@
     <style>
         .key {
             display: inline-block;
-            width: 40px;
-            height: 200px;
-            margin: 1px;
+            width: 50px; /* サイズを大きくしました */
+            height: 250px; /* サイズを大きくしました */
+            margin: 2px; /* マージンを少し大きくしました */
             background: white;
             border: 1px solid black;
             text-align: center;
-            line-height: 200px;
+            line-height: 250px; /* サイズを大きくしました */
             cursor: pointer;
         }
         .key.black {
-            width: 30px;
-            height: 120px;
+            width: 40px; /* サイズを大きくしました */
+            height: 150px; /* サイズを大きくしました */
             background: black;
             color: white;
             position: relative;
-            top: -80px;
-            left: -15px;
+            top: -100px; /* サイズを大きくしました */
+            left: -20px; /* サイズを大きくしました */
             z-index: 1;
+        }
+        button {
+            font-size: 1.2em; /* ボタンのフォントサイズを大きくしました */
+            padding: 10px 20px; /* ボタンのパディングを大きくしました */
+            margin: 5px; /* ボタンのマージンを大きくしました */
+        }
+        #volumeControl {
+            margin: 20px 0; /* スライダーのマージンを設定 */
         }
     </style>
 </head>
@@ -37,6 +45,10 @@
     <button id="playC">C音を再生</button>
     <button id="playChords">伴奏を再生</button>
     <div id="result"></div>
+    <div id="volumeControl">
+        <label for="volume">音量調節:</label>
+        <input type="range" id="volume" name="volume" min="0" max="1" step="0.01">
+    </div>
     <script src="app.js"></script>
 </body>
 </html>
