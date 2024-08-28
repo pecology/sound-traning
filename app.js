@@ -6,14 +6,21 @@ const notes = [
     { name: 'G', frequency: 392.00 },
     { name: 'A', frequency: 440.00 },
     { name: 'B', frequency: 493.88 },
-    { name: 'C2', frequency: 523.25 }
+    { name: 'C2', frequency: 523.25 },
+    { name: 'D2', frequency: 587.33 },
+    { name: 'E2', frequency: 659.25 },
+    { name: 'F2', frequency: 698.46 },
+    { name: 'G2', frequency: 783.99 },
+    { name: 'A2', frequency: 880.00 },
+    { name: 'B2', frequency: 987.77 },
+    { name: 'C3', frequency: 1046.50 }
 ];
 
 const chords = [
     { name: 'C', frequencies: [261.63, 329.63, 523.25] }, // オープンボイシング
     { name: 'Am', frequencies: [220.00, 329.63, 523.25] }, // オープンボイシング
-    { name: 'Dm', frequencies: [293.66, 349.23, 523.25] }, // オープンボイシング
-    { name: 'G', frequencies: [196.00, 392.00, 523.25] } // オープンボイシング
+    { name: 'Dm', frequencies: [293.66, 349.23, 587.33] }, // オープンボイシング
+    { name: 'G', frequencies: [196.00, 392.00, 493.88] } // オープンボイシング
 ];
 
 let audioCtx;
@@ -21,6 +28,7 @@ let sequence = [];
 let userSequence = [];
 let currentStep = 0;
 let chordInterval;
+let volume = 0.5; // 初期音量
 
 function createOscillator(frequency, type = 'sine') {
     const oscillator = audioCtx.createOscillator();
@@ -32,7 +40,7 @@ function createOscillator(frequency, type = 'sine') {
 function playTone(frequency, duration, type = 'sine') {
     const oscillator = createOscillator(frequency, type);
     const gainNode = audioCtx.createGain();
-    gainNode.gain.setValueAtTime(0.5, audioCtx.currentTime); // 音量調整
+    gainNode.gain.setValueAtTime(volume, audioCtx.currentTime); // 音量調整
     oscillator.connect(gainNode).connect(audioCtx.destination);
     oscillator.start();
     oscillator.stop(audioCtx.currentTime + duration);
@@ -42,7 +50,7 @@ function playChord(frequencies, duration) {
     frequencies.forEach(frequency => {
         const oscillator = createOscillator(frequency, 'triangle'); // 異なる音色
         const gainNode = audioCtx.createGain();
-        gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime); // 音量調整
+        gainNode.gain.setValueAtTime(volume, audioCtx.currentTime); // 音量調整
         oscillator.connect(gainNode).connect(audioCtx.destination);
         oscillator.start();
         oscillator.stop(audioCtx.currentTime + duration);
@@ -87,6 +95,10 @@ function stopChordProgression() {
     clearInterval(chordInterval);
 }
 
+function setVolume(newVolume) {
+    volume = newVolume;
+}
+
 document.getElementById('start').addEventListener('click', () => {
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -107,6 +119,10 @@ document.getElementById('playChords').addEventListener('click', () => {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
     startChordProgression();
+});
+
+document.getElementById('volumeControl').addEventListener('input', (event) => {
+    setVolume(event.target.value);
 });
 
 notes.forEach(note => {
