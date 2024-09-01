@@ -29,6 +29,8 @@ let userSequence = [];
 let currentStep = 0;
 let chordInterval;
 let volume = 0.5; // 初期音量
+let selectedOctave = 1; // 初期オクターブ
+let inputEnabled = true; // 入力を有効にするフラグ
 
 function createOscillator(frequency, type = 'sine') {
     const oscillator = audioCtx.createOscillator();
@@ -65,8 +67,9 @@ function playSequence() {
 
 function generateSequence() {
     sequence = [];
+    const availableNotes = selectedOctave === 1 ? notes.slice(0, 7) : notes;
     for (let i = 0; i < 3; i++) {
-        const randomNote = notes[Math.floor(Math.random() * notes.length)];
+        const randomNote = availableNotes[Math.floor(Math.random() * availableNotes.length)];
         sequence.push(randomNote);
     }
 }
@@ -81,6 +84,7 @@ function checkSequence() {
     }
     userSequence = [];
     currentStep = 0;
+    inputEnabled = false; // 入力を無効にする
 }
 
 function startChordProgression() {
@@ -105,6 +109,7 @@ document.getElementById('start').addEventListener('click', () => {
     }
     generateSequence();
     playSequence();
+    inputEnabled = true; // 入力を有効にする
 });
 
 document.getElementById('playC').addEventListener('click', () => {
@@ -125,6 +130,10 @@ document.getElementById('volumeControl').addEventListener('input', (event) => {
     setVolume(event.target.value);
 });
 
+document.getElementById('octaveSelect').addEventListener('change', (event) => {
+    selectedOctave = parseInt(event.target.value);
+});
+
 notes.forEach(note => {
     const key = document.createElement('div');
     key.className = 'key';
@@ -134,10 +143,12 @@ notes.forEach(note => {
             audioCtx.resume();
         }
         playTone(note.frequency, 0.5, 'square'); // 異なる音色
-        userSequence.push(note);
-        currentStep++;
-        if (currentStep === sequence.length) {
-            checkSequence();
+        if (inputEnabled) { // 入力が有効な場合のみシーケンスを処理
+            userSequence.push(note);
+            currentStep++;
+            if (currentStep === sequence.length) {
+                checkSequence();
+            }
         }
     });
     document.getElementById('keyboard').appendChild(key);
