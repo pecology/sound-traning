@@ -65,10 +65,10 @@ function playSequence() {
     });
 }
 
-function generateSequence() {
+function generateSequence(noteCount) {
     sequence = [];
     const availableNotes = selectedOctave === 1 ? notes.slice(0, 7) : notes;
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < noteCount; i++) {
         const randomNote = availableNotes[Math.floor(Math.random() * availableNotes.length)];
         sequence.push(randomNote);
     }
@@ -107,16 +107,10 @@ document.getElementById('start').addEventListener('click', () => {
     if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     }
-    generateSequence();
+    const noteCount = parseInt(document.getElementById('noteCount').value);
+    generateSequence(noteCount);
     playSequence();
     inputEnabled = true; // 入力を有効にする
-});
-
-document.getElementById('playC').addEventListener('click', () => {
-    if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    playTone(261.63, 0.5); // C音
 });
 
 document.getElementById('playChords').addEventListener('click', () => {
@@ -132,6 +126,13 @@ document.getElementById('volumeControl').addEventListener('input', (event) => {
 
 document.getElementById('octaveSelect').addEventListener('change', (event) => {
     selectedOctave = parseInt(event.target.value);
+});
+
+document.getElementById('repeat').addEventListener('click', () => {
+    if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    playSequence();
 });
 
 notes.forEach(note => {
